@@ -1,6 +1,7 @@
 package main
 
 import (
+	"finance-app/internal/database"
 	"flag"
 	"net"
 	"net/http"
@@ -18,7 +19,10 @@ func main() {
 	flag.Parse()
 
 	logrus.SetLevel(logrus.DebugLevel)
-
+	_, err := database.New()
+	if err != nil {
+		logrus.WithError(err).Fatal("Error verifying database")
+	}
 	var addr = net.JoinHostPort(*host, *port)
 	router := mux.NewRouter()
 	server := http.Server{
