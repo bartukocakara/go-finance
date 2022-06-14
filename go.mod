@@ -1,3 +1,3 @@
-module go-finance
+module finance-app
 
 go 1.18
