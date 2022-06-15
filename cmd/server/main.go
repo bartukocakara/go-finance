@@ -1,13 +1,13 @@
 package main
 
 import (
+	"finance-app/internal/api"
 	"finance-app/internal/config"
 	"finance-app/internal/database"
 	"flag"
 	"net"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 )
@@ -22,12 +22,16 @@ func main() {
 
 	logrus.SetLevel(logrus.DebugLevel)
 	logrus.WithField("version", config.Version).Debug("Starting server.")
-	_, err := database.New()
+	db, err := database.New()
 	if err != nil {
 		logrus.WithError(err).Fatal("Error verifying database")
 	}
+	router, err := api.NewRouter(db)
+	if err != nil {
+		logrus.WithError(err).Fatal("Error building router")
+	}
+
 	var addr = net.JoinHostPort(*host, *port)
-	router := mux.NewRouter()
 	server := http.Server{
 		Handler: router,
 		Addr:    addr,
