@@ -1,6 +1,7 @@
 package main
 
 import (
+	"finance-app/internal/config"
 	"finance-app/internal/database"
 	"flag"
 	"net"
@@ -20,6 +21,7 @@ func main() {
 	flag.Parse()
 
 	logrus.SetLevel(logrus.DebugLevel)
+	logrus.WithField("version", config.Version).Debug("Starting server.")
 	_, err := database.New()
 	if err != nil {
 		logrus.WithError(err).Fatal("Error verifying database")
