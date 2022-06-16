@@ -33,8 +33,8 @@
 
 ### Run project locally with Docker
 ```
-docker-compose build
-docker-compose up
+make build-dev
+make up-dev
 
 ```
 
