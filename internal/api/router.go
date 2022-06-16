@@ -11,7 +11,9 @@ import (
 func NewRouter(db database.Database) (http.Handler, error) {
 	router := mux.NewRouter()
 	router.HandleFunc("/version", v1.VersionHandler)
-	router.PathPrefix("/api/v1").Subrouter()
+	apiRouter := router.PathPrefix("/api/v1").Subrouter()
+
+	v1.SetUserAPI(db, apiRouter)
 
 	return router, nil
 }
