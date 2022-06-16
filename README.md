@@ -1,8 +1,9 @@
+<img src="/public/bg_banner.png" alt="Alt text" title="Optional title" width="120">
+
 ### Finance App
 - By using this application user can track all expenses, income, etc...
 - User can create different accounts and create transaction. Can create budgets scheduled income payments
 
-<img src="/public/bg_banner.png" alt="Alt text" title="Optional title" width="100">
 
 ### Packages
 
