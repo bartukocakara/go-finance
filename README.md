@@ -1,6 +1,7 @@
-<img src="/public/bg_banner.png" alt="Alt text" title="Optional title" width="120">
-<img src="/public/go-logo.png" alt="Alt text" title="Optional title" width="120">
-
+<div style="display:flex">
+  <img src="/public/bg_banner.png" alt="Alt text" title="Optional title" width="120">
+  <img src="/public/go-logo.png" alt="Alt text" title="Optional title" width="120">
+</div>
 ### Finance App
 - By using this application user can track all expenses, income, etc...
 - User can create different accounts and create transaction. Can create budgets scheduled income payments
