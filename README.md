@@ -1,7 +1,7 @@
 <div style="display:flex">
   <img src="/public/bg_banner.png" alt="Alt text" title="Finance App" width="120">
   <img src="/public/go-logo.png" alt="Alt text" title="Golang" width="120">
-  <img src="/public/postgres.png" alt="Alt text" title="PostgreSQL" width="120">
+  <img src="/public/postgres-logo.png" alt="Alt text" title="PostgreSQL" width="120">
   <img src="/public/docker.png" alt="Alt text" title="Docker" width="120">
 </div>
 
