@@ -2,8 +2,7 @@
 - By using this application user can track all expenses, income, etc...
 - User can create different accounts and create transaction. Can create budgets scheduled income payments
 
-![alt text](public/bg_banner.png)
-
+<img src="/public/bg_banner.png" alt="Alt text" title="Optional title">
 
 ### Packages
 
