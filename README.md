@@ -2,6 +2,8 @@
 - By using this application user can track all expenses, income, etc...
 - User can create different accounts and create transaction. Can create budgets scheduled income payments
 
+![alt text](https://github.com/bartukocakara/go-finance/tree/master/public/bg_banner.png?raw=true)
+
 
 ### Packages
 
