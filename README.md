@@ -1,4 +1,5 @@
 <img src="/public/bg_banner.png" alt="Alt text" title="Optional title" width="120">
+<img src="/public/go-logo.png" alt="Alt text" title="Optional title" width="120">
 
 ### Finance App
 - By using this application user can track all expenses, income, etc...
