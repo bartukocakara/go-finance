@@ -13,4 +13,4 @@ fmt-code:
 # Vet examines Go source code and reports suspicious constructs,
 # such as Printf calls whose arguments do not align with the format string.
 vet-code:
-	go vet ./..
+	go vet ./...
