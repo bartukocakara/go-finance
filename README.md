@@ -2,6 +2,7 @@
   <img src="/public/bg_banner.png" alt="Alt text" title="Optional title" width="120">
   <img src="/public/go-logo.png" alt="Alt text" title="Optional title" width="120">
   <img src="/public/postgres.png" alt="Alt text" title="Optional title" width="120">
+  <img src="/public/docker.png" alt="Alt text" title="Optional title" width="120">
 </div>
 
 ### Finance App
