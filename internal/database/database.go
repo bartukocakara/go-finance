@@ -29,6 +29,10 @@ func Connect() (*sqlx.DB, error) {
 		return nil, err
 	}
 
+	if err := migrateDB(conn.DB); err != nil {
+		return nil, errors.Wrap(err, "Could not migrate to database")
+	}
+
 	return conn, nil
 }
 
