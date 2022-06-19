@@ -4,7 +4,9 @@
   <img src="/public/postgres-logo.png" alt="Alt text" title="PostgreSQL" width="120">
   <img src="/public/docker.png" alt="Alt text" title="Docker" width="120">
 </div>
+
 ### Semantic Versioning 2.0.0 https://semver.org/lang/tr/
+
 ### Finance App
 - By using this application user can track all expenses, income, etc...
 - User can create different accounts and create transaction. Can create budgets scheduled income payments
