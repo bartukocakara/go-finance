@@ -2,7 +2,7 @@ package database
 
 import (
 	"database/sql"
-	"finance-app/internal/config"
+	"financial-app/internal/config"
 	"fmt"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -19,7 +19,7 @@ func migrateDB(db *sql.DB) error {
 	}
 
 	migrationSource := fmt.Sprintf(
-		"file://%s/internal/database/migrations/", *config.DataDirectory)
+		"file://%s/go/src/financial-app/internal/database/migrations/", *config.DataDirectory)
 	migrator, err := migrate.NewWithDatabaseInstance(
 		migrationSource,
 		"postgres", driver)
