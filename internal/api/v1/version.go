@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"finance-app/internal/config"
+	"financial-app/internal/config"
 
 	"github.com/sirupsen/logrus"
 )

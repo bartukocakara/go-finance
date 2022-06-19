@@ -1,8 +1,8 @@
 package api
 
 import (
-	v1 "finance-app/internal/api/v1"
-	"finance-app/internal/database"
+	v1 "financial-app/internal/api/v1"
+	"financial-app/internal/database"
 	"net/http"
 
 	"github.com/gorilla/mux"

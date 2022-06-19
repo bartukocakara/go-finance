@@ -1,9 +1,9 @@
 package main
 
 import (
-	"finance-app/internal/api"
-	"finance-app/internal/config"
-	"finance-app/internal/database"
+	"financial-app/internal/api"
+	"financial-app/internal/config"
+	"financial-app/internal/database"
 	"flag"
 	"net"
 	"net/http"

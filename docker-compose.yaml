@@ -17,4 +17,4 @@ services:
     environment:
       DATABASE_URL: 'postgres://postgres:password@db:5432/postgres?sslmode=disable'
       DATABASE_TIMEOUT_MS: 10000
-      DATA_DIRECTORY: '/go/src/finance-app'
+      DATA_DIRECTORY: '/go/src/financial-app'

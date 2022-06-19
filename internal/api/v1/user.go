@@ -2,7 +2,7 @@ package v1
 
 import (
 	"encoding/json"
-	"finance-app/internal/database"
+	"financial-app/internal/database"
 	"net/http"
 
 	"github.com/gorilla/mux"

@@ -1,4 +1,4 @@
-module finance-app
+module financial-app
 
 go 1.18
 
