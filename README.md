@@ -31,7 +31,12 @@
 * [ ] User create transaction in each account, transaction can be income, expenses or transfer to other account
 * User can create categories and assign transactions to different categories
 * [ ] User can see total amount of money on each account and trends
+* [ ] Multiple currency options
 
+### Configs
+* [ ] Localization
+* [ ] DB Access
+* [ ] Timezone
 
 ### Run project locally with Docker
 ```
