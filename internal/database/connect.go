@@ -9,6 +9,8 @@ import (
 const UniqueViolation = "unique_violation"
 
 type Database interface {
+	UsersDB
+	SessionDB
 	io.Closer
 }
 
