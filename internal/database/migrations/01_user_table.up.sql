@@ -8,4 +8,5 @@ CREATE TABLE users (
     deleted_at TIMESTAMP
 );
 
-CREATE UNIQUE INDEX user_email ON users (email);
+CREATE UNIQUE INDEX user_email 
+    ON users (email);
