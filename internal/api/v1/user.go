@@ -24,6 +24,7 @@ func SetUserAPI(db database.Database, router *mux.Router) {
 	apis := []API{
 		// -----------USER----------------------------
 		NewAPI(http.MethodPost, "/users", api.Create),
+		NewAPI(http.MethodPost, "/login", api.Login),
 	}
 
 	for _, api := range apis {
@@ -140,4 +141,39 @@ func (api *UserAPI) WriteTokenResponse(
 	}
 
 	utils.WriteJson(w, status, tokenResponse)
+}
+
+func (api *UserAPI) Login(w http.ResponseWriter, r *http.Request) {
+	logger := logrus.WithField("func", "user.go -> Login()")
+
+	var credentials model.Credentials
+	if err := json.NewDecoder(r.Body).Decode(&credentials); err != nil {
+		logger.WithError(err).Warn("Could not decode parameters")
+		utils.WriteError(w, http.StatusBadRequest, "Could not decode parameters", map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if err := credentials.SessionData.Verify(); err != nil {
+		logger.WithError(err).Warn("Not all fields found")
+		utils.WriteError(w, http.StatusBadRequest, "Not all fields found", map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+	logger = logger.WithFields(logrus.Fields{
+		"email": credentials.Email,
+	})
+
+	ctx := r.Context()
+	user, err := api.DB.GetUserByEmail(ctx, credentials.Email)
+	if err != nil {
+		logger.WithError(err).Warn("Error login in")
+		utils.WriteError(w, http.StatusConflict, "Invalid password", nil)
+		return
+	}
+
+	logger.WithField("userID", user.ID).Info("User Login")
+	api.WriteTokenResponse(ctx, w, http.StatusOK, user, &credentials.SessionData, true)
 }
