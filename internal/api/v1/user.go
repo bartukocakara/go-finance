@@ -24,11 +24,12 @@ func SetUserAPI(db database.Database, router *mux.Router) {
 	apis := []API{
 		// -----------USER----------------------------
 		NewAPI(http.MethodPost, "/users", api.Create),
+		NewAPI(http.MethodGet, "/users", api.List),
 		NewAPI(http.MethodPost, "/login", api.Login),
 	}
 
 	for _, api := range apis {
-		router.HandleFunc(api.Path, api.Func)
+		router.HandleFunc(api.Path, api.Func).Methods(api.Method)
 	}
 }
 
@@ -176,4 +177,26 @@ func (api *UserAPI) Login(w http.ResponseWriter, r *http.Request) {
 
 	logger.WithField("userID", user.ID).Info("User Login")
 	api.WriteTokenResponse(ctx, w, http.StatusOK, user, &credentials.SessionData, true)
+}
+
+func (api *UserAPI) List(w http.ResponseWriter, r *http.Request) {
+	logger := logrus.WithField("Func", "user.go ->List()")
+
+	principal := auth.GetPrincipal(r)
+
+	logger = logger.WithFields(logrus.Fields{
+		"principal": principal,
+	})
+
+	ctx := r.Context()
+
+	users, err := api.DB.ListUsers(ctx)
+	if err != nil {
+		logger.WithError(err).Warn("Error getting users")
+		utils.WriteError(w, http.StatusConflict, "Error getting users", nil)
+		return
+	}
+
+	logger.Info("Users returned")
+	utils.WriteJson(w, http.StatusOK, &users)
 }
