@@ -8,8 +8,8 @@ import (
 )
 
 type UserRoleDB interface {
-	GrantRole(ctx context.Context, UserID model.UserID, role model.Role) error	
-	GetRolesByUser(ctx context.Context, userID model.UserID)([]*model.UserRole, error)
+	GrantRole(ctx context.Context, UserID model.UserID, role model.Role) error
+	GetRolesByUser(ctx context.Context, userID model.UserID) ([]*model.UserRole, error)
 }
 
 const grantUserRoleQuery = `
@@ -30,6 +30,7 @@ const getRolesByUserIDQuery = `
 	FROM user_roles
 	WHERE user_id = $1;
 `
+
 func (d *database) GetRolesByUser(ctx context.Context, userID model.UserID) ([]*model.UserRole, error) {
 	var roles []*model.UserRole
 	if err := d.conn.SelectContext(ctx, &roles, getRolesByUserIDQuery, userID); err != nil {

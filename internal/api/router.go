@@ -14,6 +14,7 @@ func NewRouter(db database.Database) (http.Handler, error) {
 	apiRouter := router.PathPrefix("/api/v1").Subrouter()
 
 	v1.SetUserAPI(db, apiRouter)
+	v1.SetUserRoleAPI(db, apiRouter)
 
 	return router, nil
 }
