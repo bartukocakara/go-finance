@@ -50,7 +50,7 @@ make up-dev
 #### PREFIX = api
 #### VERSION = v1
 ### FULL URL = http://localhost:8088/api/v1/
-| Endpoints  | Descriptions |  Methods | Params |
+| Endpoints  | Description |  Methods | Params |
 | :------:|  :-----------:| :-----------:| :-----------:|
 | /users   | Create User  | POST | email, deviceID, password|
 | /users   | List Users | GET | - |
