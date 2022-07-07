@@ -3,7 +3,7 @@
 -- Role 'member' is if user exists in database
 -- If we need more roles we will add them to this ENUM
 CREATE TYPE user_role AS ENUM (
-    'admin'
+    'admin', 'user'
 );
 
 CREATE TABLE user_roles (
