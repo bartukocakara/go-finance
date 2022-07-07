@@ -11,6 +11,7 @@ type UserRoleDB interface {
 	GrantRole(ctx context.Context, UserID model.UserID, role model.Role) error
 	GetRolesByUser(ctx context.Context, userID model.UserID) ([]*model.UserRole, error)
 	UpdateRole(ctx context.Context, UserID model.UserID, role model.Role) error
+	RevokeRole(ctx context.Context, UserID model.UserID, role model.Role) error
 }
 
 const grantUserRoleQuery = `
@@ -49,6 +50,18 @@ const updateRoleByUserIDQuery = `
 func (d *database) UpdateRole(ctx context.Context, userID model.UserID, role model.Role) error {
 	if _, err := d.conn.ExecContext(ctx, updateRoleByUserIDQuery, role, userID); err != nil {
 		return errors.Wrap(err, "Could not update users role")
+	}
+	return nil
+}
+
+const deleteRoleFromUserByIDQuery = `
+	DELETE FROM user_roles
+	WHERE user_id = $1 AND role = $2;
+`
+
+func (d *database) RevokeRole(ctx context.Context, userID model.UserID, role model.Role) error {
+	if _, err := d.conn.ExecContext(ctx, deleteRoleFromUserByIDQuery, userID, role); err != nil {
+		return err
 	}
 	return nil
 }

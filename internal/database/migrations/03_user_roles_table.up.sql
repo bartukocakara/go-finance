@@ -12,5 +12,5 @@ CREATE TABLE user_roles (
     PRIMARY KEY(user_id, role)
 );
 
-CREATE INDEX user_roles_user_user
+CREATE INDEX user_roles_user
     ON user_roles (user_id)
