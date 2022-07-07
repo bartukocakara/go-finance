@@ -23,6 +23,7 @@ func SetUserRoleAPI(db database.Database, router *mux.Router) {
 	apis := []API{
 		NewAPI(http.MethodPost, "/users/{UserID}/roles", api.GrantRole),
 		NewAPI(http.MethodPut, "/users/{UserID}/roles", api.UpdateRole),
+		NewAPI(http.MethodDelete, "/users/{UserID}/roles", api.RevokeRole),
 	}
 	for _, api := range apis {
 		router.HandleFunc(api.Path, api.Func).Methods(api.Method)
@@ -86,8 +87,41 @@ func (api *UserRoleAPI) UpdateRole(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logrus.WithField("UserID", UserID).Info("User role updated successfully", userRole.Role)
+	logrus.WithField("UserID", UserID).Info("User role updated successfully : ", userRole.Role)
 	utils.WriteJson(w, http.StatusCreated, &ActionUpdated{
 		Updated: true,
 	})
+}
+
+func (api *UserRoleAPI) RevokeRole(w http.ResponseWriter, r *http.Request) {
+	logger := logrus.WithField("func", "user.go -> Revoke Role")
+
+	vars := mux.Vars(r)
+	userID := model.UserID(vars["UserID"])
+	principal := auth.GetPrincipal(r)
+	logger = logger.WithFields(logrus.Fields{
+		"userID":    userID,
+		"principal": principal,
+	})
+
+	var userRole model.UserRole
+	if err := json.NewDecoder(r.Body).Decode(&userRole); err != nil {
+		logger.WithError(err).Warn("Could not decode parameters")
+		utils.WriteError(w, http.StatusBadRequest, "Could not decode parameters", map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	ctx := r.Context()
+	if err := api.DB.RevokeRole(ctx, userID, userRole.Role); err != nil {
+		logger.WithError(err).Warn("Error revoking role")
+		utils.WriteError(w, http.StatusInternalServerError, "Error revoking role", nil)
+	}
+
+	logrus.WithField("userID", userID).Info("User revoked successfully : ", userRole)
+	utils.WriteJson(w, http.StatusCreated, &ActionDeleted{
+		Deleted: true,
+	})
+
 }
