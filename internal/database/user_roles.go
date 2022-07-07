@@ -10,6 +10,7 @@ import (
 type UserRoleDB interface {
 	GrantRole(ctx context.Context, UserID model.UserID, role model.Role) error
 	GetRolesByUser(ctx context.Context, userID model.UserID) ([]*model.UserRole, error)
+	UpdateRole(ctx context.Context, UserID model.UserID, role model.Role) error
 }
 
 const grantUserRoleQuery = `
@@ -37,4 +38,17 @@ func (d *database) GetRolesByUser(ctx context.Context, userID model.UserID) ([]*
 		return nil, errors.Wrap(err, "Could not get user roles")
 	}
 	return roles, nil
+}
+
+const updateRoleByUserIDQuery = `
+	UPDATE user_roles
+	SET role = $1
+	WHERE user_id = $2;
+`
+
+func (d *database) UpdateRole(ctx context.Context, userID model.UserID, role model.Role) error {
+	if _, err := d.conn.ExecContext(ctx, updateRoleByUserIDQuery, role, userID); err != nil {
+		return errors.Wrap(err, "Could not update users role")
+	}
+	return nil
 }

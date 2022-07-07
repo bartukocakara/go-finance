@@ -21,7 +21,8 @@ func SetUserRoleAPI(db database.Database, router *mux.Router) {
 		DB: db,
 	}
 	apis := []API{
-		NewAPI(http.MethodPost, "/users/{userID}/roles", api.GrantRole),
+		NewAPI(http.MethodPost, "/users/{UserID}/roles", api.GrantRole),
+		NewAPI(http.MethodPut, "/users/{UserID}/roles", api.UpdateRole),
 	}
 	for _, api := range apis {
 		router.HandleFunc(api.Path, api.Func).Methods(api.Method)
@@ -31,10 +32,10 @@ func SetUserRoleAPI(db database.Database, router *mux.Router) {
 func (api *UserRoleAPI) GrantRole(w http.ResponseWriter, r *http.Request) {
 	logger := logrus.WithField("func", "user_roles.go -> GrantRole()")
 	vars := mux.Vars(r)
-	userID := model.UserID(vars["userID"])
+	UserID := model.UserID(vars["UserID"])
 	principal := auth.GetPrincipal(r)
 	logger = logger.WithFields(logrus.Fields{
-		"userID":    userID,
+		"userID":    UserID,
 		"principal": principal,
 	})
 
@@ -48,13 +49,45 @@ func (api *UserRoleAPI) GrantRole(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := r.Context()
-	if err := api.DB.GrantRole(ctx, userID, userRole.Role); err != nil {
+	if err := api.DB.GrantRole(ctx, UserID, userRole.Role); err != nil {
 		logger.WithError(err).Warn("Error while granting role")
 		utils.WriteError(w, http.StatusInternalServerError, "Error granting role", nil)
 		return
 	}
-	logger.WithField("UserID", userID).Info("Role Granted to user", userID)
+	logger.WithField("UserID", UserID).Info("Role Granted to user", UserID)
 	utils.WriteJson(w, http.StatusCreated, &ActionCreated{
 		Created: true,
+	})
+}
+
+func (api *UserRoleAPI) UpdateRole(w http.ResponseWriter, r *http.Request) {
+	logger := logrus.WithField("func", "user_role.go -> UpdateRole")
+	vars := mux.Vars(r)
+	UserID := model.UserID(vars["UserID"])
+	principal := auth.GetPrincipal(r)
+
+	logger = logrus.WithFields(logrus.Fields{
+		"userID":    UserID,
+		"principal": principal,
+	})
+
+	var userRole model.UserRole
+	if err := json.NewDecoder(r.Body).Decode(&userRole); err != nil {
+		logger.WithError(err).Warn("Could not decode parameters")
+		utils.WriteError(w, http.StatusBadRequest, "Could not decode parameters", map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx := r.Context()
+	if err := api.DB.UpdateRole(ctx, UserID, userRole.Role); err != nil {
+		logger.WithError(err).Warn("Error updating role")
+		utils.WriteError(w, http.StatusInternalServerError, "Error updating role", nil)
+		return
+	}
+
+	logrus.WithField("UserID", UserID).Info("User role updated successfully", userRole.Role)
+	utils.WriteJson(w, http.StatusCreated, &ActionUpdated{
+		Updated: true,
 	})
 }
