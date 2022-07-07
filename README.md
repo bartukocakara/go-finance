@@ -45,3 +45,17 @@ make up-dev
 
 ```
 
+### Endpoints
+BASE URL = http://localhost:8088
+PREFIX = api
+VERSION = v1
+
+| Endpoints  | Descriptions |  Methods | Params |
+| :------:|  :-----------:| :-----------:| :-----------:|
+| /users   | Create User  | POST | email, deviceID, password|
+| /users   | List Users | GET | - |
+| /login   | Login User  | POST | email, deviceID, password |
+| /users/{userID}/roles   | Grant Role to User | POST | role(user, admin) |
+| /users/{userID}/roles   | Revoke Role from User | DELETE | role(user, admin) |
+| /users/{userID}/roles   | List Users Role | GET | - |
+| /users/{userID}/roles   | Update Users Role  | UPDATE | role(user, admin) |
