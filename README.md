@@ -46,10 +46,10 @@ make up-dev
 ```
 
 ### Endpoints
-BASE URL = http://localhost:8088
-PREFIX = api
-VERSION = v1
-
+#### BASE URL = http://localhost:8088
+#### PREFIX = api
+#### VERSION = v1
+### FULL URL = http://localhost:8088/api/v1/
 | Endpoints  | Descriptions |  Methods | Params |
 | :------:|  :-----------:| :-----------:| :-----------:|
 | /users   | Create User  | POST | email, deviceID, password|
