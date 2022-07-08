@@ -17,15 +17,15 @@ type UserAPI struct {
 	DB database.Database // Will represent all database interface
 }
 
-func SetUserAPI(db database.Database, router *mux.Router) {
+func SetUserAPI(db database.Database, router *mux.Router, permissions auth.Permissions) {
 	api := &UserAPI{
 		DB: db,
 	}
 	apis := []API{
 		// -----------USER----------------------------
-		NewAPI(http.MethodPost, "/users", api.Create),
-		NewAPI(http.MethodGet, "/users", api.List),
-		NewAPI(http.MethodPost, "/login", api.Login),
+		NewAPI(http.MethodPost, "/users", api.Create, auth.Any),
+		NewAPI(http.MethodGet, "/users", api.List, auth.Admin, auth.MemberIsTarget),
+		NewAPI(http.MethodPost, "/login", api.Login, auth.Any),
 	}
 
 	for _, api := range apis {

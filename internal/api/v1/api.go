@@ -1,17 +1,22 @@
 package v1
 
-import "net/http"
+import (
+	"financial-app/internal/api/auth"
+	"net/http"
+)
 
 type API struct {
-	Path   string
-	Method string
-	Func   http.HandlerFunc
+	Path            string
+	Method          string
+	Func            http.HandlerFunc
+	permissionTypes []auth.PermissionType
 }
 
-func NewAPI(method string, path string, handlerFunc http.HandlerFunc) API {
+func NewAPI(method string, path string, handlerFunc http.HandlerFunc, permissionTypes ...auth.PermissionType) API {
 	return API{
-		Path:   path,
-		Method: method,
-		Func:   handlerFunc,
+		Path:            path,
+		Method:          method,
+		Func:            handlerFunc,
+		permissionTypes: permissionTypes,
 	}
 }
