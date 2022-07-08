@@ -24,6 +24,7 @@ func SetUserRoleAPI(db database.Database, router *mux.Router) {
 		NewAPI(http.MethodPost, "/users/{UserID}/roles", api.GrantRole),
 		NewAPI(http.MethodPut, "/users/{UserID}/roles", api.UpdateRole),
 		NewAPI(http.MethodDelete, "/users/{UserID}/roles", api.RevokeRole),
+		NewAPI(http.MethodGet, "/users/{UserID}/roles", api.GetRoleList),
 	}
 	for _, api := range apis {
 		router.HandleFunc(api.Path, api.Func).Methods(api.Method)
@@ -123,5 +124,34 @@ func (api *UserRoleAPI) RevokeRole(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJson(w, http.StatusCreated, &ActionDeleted{
 		Deleted: true,
 	})
+
+}
+
+func (api *UserRoleAPI) GetRoleList(w http.ResponseWriter, r *http.Request) {
+	logger := logrus.WithField("func", "user_role.go -> GetRoleList")
+
+	vars := mux.Vars(r)
+	userID := model.UserID(vars["UserID"])
+
+	principal := auth.GetPrincipal(r)
+
+	logger = logger.WithFields(logrus.Fields{
+		"userID":    userID,
+		"principal": principal,
+	})
+
+	ctx := r.Context()
+
+	userRoles, err := api.DB.GetRolesByUser(ctx, userID)
+	if err != nil {
+		logger.WithError(err).Warn("Error getting user roles")
+		utils.WriteError(w, http.StatusInternalServerError, "Error getting user roles", nil)
+		return
+	}
+	if userRoles == nil {
+		userRoles = make([]*model.UserRole, 0)
+	}
+	logrus.WithField("userRoles", userRoles).Info("User roles fetched successfully")
+	utils.WriteJson(w, http.StatusOK, &userRoles)
 
 }

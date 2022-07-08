@@ -59,3 +59,4 @@ make up-dev
 | /users/{userID}/roles   | Revoke Role from User | DELETE | role(user, admin) |
 | /users/{userID}/roles   | List Users Role | GET | - |
 | /users/{userID}/roles   | Update Users Role  | UPDATE | role(user, admin) |
+
