@@ -16,18 +16,18 @@ type UserRoleAPI struct {
 	DB database.Database
 }
 
-func SetUserRoleAPI(db database.Database, router *mux.Router) {
+func SetUserRoleAPI(db database.Database, router *mux.Router, permissions auth.Permissions) {
 	api := &UserRoleAPI{
 		DB: db,
 	}
 	apis := []API{
-		NewAPI(http.MethodPost, "/users/{UserID}/roles", api.GrantRole),
-		NewAPI(http.MethodPut, "/users/{UserID}/roles", api.UpdateRole),
-		NewAPI(http.MethodDelete, "/users/{UserID}/roles", api.RevokeRole),
-		NewAPI(http.MethodGet, "/users/{UserID}/roles", api.GetRoleList),
+		NewAPI(http.MethodPost, "/users/{UserID}/roles", api.GrantRole, auth.Admin),
+		NewAPI(http.MethodPut, "/users/{UserID}/roles", api.UpdateRole, auth.Admin),
+		NewAPI(http.MethodDelete, "/users/{UserID}/roles", api.RevokeRole, auth.Admin),
+		NewAPI(http.MethodGet, "/users/{UserID}/roles", api.GetRoleList, auth.Admin),
 	}
 	for _, api := range apis {
-		router.HandleFunc(api.Path, api.Func).Methods(api.Method)
+		router.HandleFunc(api.Path, permissions.Wrap(api.Func, api.permissionTypes...)).Methods(api.Method)
 	}
 }
 
@@ -116,8 +116,9 @@ func (api *UserRoleAPI) RevokeRole(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 	if err := api.DB.RevokeRole(ctx, userID, userRole.Role); err != nil {
-		logger.WithError(err).Warn("Error revoking role")
+		logger.WithError(err).Warn("Error revoking role", userRole)
 		utils.WriteError(w, http.StatusInternalServerError, "Error revoking role", nil)
+		return
 	}
 
 	logrus.WithField("userID", userID).Info("User revoked successfully : ", userRole)
