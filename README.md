@@ -9,7 +9,7 @@
 | No. | Topic                                                                   |
 | --- | ----------------------------------------------------------------------- |
 | 1   | [**Semantic Versioning 2.0.0**](#Semantic-Versioning-2.0.0)       |
-| 2   | [**Finance App**](#Finance-App)                             |
+| 2   | [**Purpose**](#Purpose)                             |
 | 3   | [**Packages**](#Packages)                               |
 | 4   | [**Technologies**](#Technologies)                                                 |
 | 5   | [**Features**](#Features)                                                 |
@@ -18,7 +18,7 @@
 
 ### Semantic Versioning 2.0.0 https://semver.org/lang/tr/
 
-### Finance App
+### Purpose
 - By using this application user can track all expenses, income, etc...
 - User can create different accounts and create transaction. Can create budgets scheduled income payments
 
