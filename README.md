@@ -50,13 +50,13 @@ make up-dev
 #### PREFIX = api
 #### VERSION = v1
 ### FULL URL = http://localhost:8088/api/v1/
-| Endpoints  | Description |  Methods | Params |
-| :------:|  :-----------:| :-----------:| :-----------:|
-| /users   | Create User  | POST | email, deviceID, password|
-| /users   | List Users | GET | - |
-| /login   | Login User  | POST | email, deviceID, password |
-| /users/{userID}/roles   | Grant Role to User | POST | role(user, admin) |
-| /users/{userID}/roles   | Revoke Role from User | DELETE | role(user, admin) |
-| /users/{userID}/roles   | List Users Role | GET | - |
-| /users/{userID}/roles   | Update Users Role  | UPDATE | role(user, admin) |
+| Endpoints  | Description |  Methods | Params | Header | Allowed Roles |
+| :------:|  :-----------:| :-----------:| :-----------:| :-----------:| :-----------:|
+| /users   | Create User  | POST | email, deviceID, password| - | - |
+| /users   | List Users | GET | - | Bearer {Token} | 'admin' |
+| /login   | Login User  | POST | email, deviceID, password | - | - |
+| /users/{userID}/roles   | Grant Role to User | POST | role(user, admin) | Bearer {Token} | 'admin' |
+| /users/{userID}/roles   | Revoke Role from User | DELETE | role(user, admin) | Bearer {Token} | 'admin' |
+| /users/{userID}/roles   | List Users Role | GET | - | Bearer {Token} | 'admin' |
+| /users/{userID}/roles   | Update Users Role  | UPDATE | role(user, admin) | Bearer {Token} | 'admin' |
 
