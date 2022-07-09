@@ -26,6 +26,7 @@ func SetUserAPI(db database.Database, router *mux.Router, permissions auth.Permi
 		NewAPI(http.MethodPost, "/users", api.Create, auth.Any),
 		NewAPI(http.MethodGet, "/users", api.List, auth.Admin, auth.MemberIsTarget),
 		NewAPI(http.MethodGet, "/users/{UserID}", api.Get, auth.Admin, auth.MemberIsTarget),
+		NewAPI(http.MethodPatch, "/users/{UserID}", api.Update, auth.Admin, auth.MemberIsTarget),
 		NewAPI(http.MethodPost, "/login", api.Login, auth.Any),
 	}
 
@@ -59,7 +60,7 @@ func (api *UserAPI) Create(w http.ResponseWriter, r *http.Request) {
 		"email": *userParameters.Email,
 	})
 
-	if err := userParameters.User.Verify(); err != nil {
+	if err := userParameters.User.VerifyEmail(); err != nil {
 		logger.WithError(err).Warn("Not all fields found", map[string]string{
 			"Error": err.Error(),
 		})
@@ -172,7 +173,13 @@ func (api *UserAPI) Login(w http.ResponseWriter, r *http.Request) {
 	user, err := api.DB.GetUserByEmail(ctx, credentials.Email)
 	if err != nil {
 		logger.WithError(err).Warn("Error login in")
-		utils.WriteError(w, http.StatusConflict, "Invalid password", nil)
+		utils.WriteError(w, http.StatusConflict, "Invalid Email", nil)
+		return
+	}
+
+	if err := user.CheckPassword(credentials.Password); err != nil {
+		logger.WithError(err).Warn("Error log in")
+		utils.WriteError(w, http.StatusUnauthorized, "Invalid Password", nil)
 		return
 	}
 
@@ -214,5 +221,61 @@ func (api *UserAPI) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	logger.WithField("UserID", user.ID).Info("Get user success")
+	utils.WriteJson(w, http.StatusOK, user)
+}
+
+// Patch - /users/{UserID}
+// Permission - Member Is Target, Admin
+func (api *UserAPI) Update(w http.ResponseWriter, r *http.Request) {
+	logger := logrus.WithField("Func", "user.go -> Update()")
+
+	vars := mux.Vars(r)
+	userID := model.UserID(vars["UserID"])
+	principal := auth.GetPrincipal(r)
+
+	logger = logger.WithFields(logrus.Fields{
+		"userID":    userID,
+		"principal": principal,
+	})
+
+	var userRequest UserParameters
+	if err := json.NewDecoder(r.Body).Decode(&userRequest); err != nil {
+		logger.WithError(err).Warn("Could not decode parameters")
+		utils.WriteError(w, http.StatusBadRequest, "Could not decode parameters", map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx := r.Context()
+	user, err := api.DB.GetUserByID(ctx, userID)
+	if err != nil {
+		logger.WithError(err).Warn("Error getting user")
+		utils.WriteError(w, http.StatusConflict, "Error getting user", nil)
+		return
+	}
+
+	if len(userRequest.Password) != 0 {
+		if err := user.SetPassword(userRequest.Password); err != nil {
+			logger.WithError(err).Warn("Error setting password")
+			utils.WriteError(w, http.StatusInternalServerError, "Error setting password", nil)
+			return
+		}
+	}
+
+	if err := user.VerifyEmail(); err != nil {
+		logger.WithError(err).Warn("Email field is missing", map[string]string{
+			"Error": err.Error(),
+		})
+		utils.WriteError(w, http.StatusBadRequest, "Error verifying email", nil)
+		return
+	}
+	user.Email = userRequest.Email
+	if err := api.DB.UpdateUser(ctx, user); err != nil {
+		logger.WithError(err).Warn("Error updating user")
+		utils.WriteError(w, http.StatusInternalServerError, "Error updating user", nil)
+		return
+	}
+
+	logger.Info("User updated")
 	utils.WriteJson(w, http.StatusOK, user)
 }

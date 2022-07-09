@@ -13,6 +13,7 @@ type UsersDB interface {
 	GetUserByID(ctx context.Context, userID model.UserID) (*model.User, error)
 	GetUserByEmail(ctx context.Context, email string) (*model.User, error)
 	ListUsers(ctx context.Context) ([]*model.User, error)
+	UpdateUser(ctx context.Context, user *model.User) error
 }
 
 var ErrUserExists = errors.New("User with that email already exists")
@@ -91,4 +92,25 @@ func (d *database) ListUsers(ctx context.Context) ([]*model.User, error) {
 	}
 
 	return users, nil
+}
+
+const updateUserQuery = `
+	UPDATE users
+	SET password = :password, 
+		email = :email
+	WHERE user_id = :user_id;
+`
+
+func (d *database) UpdateUser(ctx context.Context, user *model.User) error {
+	result, err := d.conn.NamedExecContext(ctx, updateUserQuery, user)
+	if err != nil {
+		return nil
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil || rows == 0 {
+		return errors.New("User not found")
+	}
+
+	return nil
 }
