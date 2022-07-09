@@ -28,9 +28,9 @@
 - MIGRATE - Migration https://github.com/golang-migrate/migrate
 - MUX - Routing https://github.com/gorilla/mux
 - LOGRUS - Logging  https://github.com/sirupsen/logrus
+- CACHE - Caching github.com/bluele/gcache
 
-
-### Technologies
+### Server
 
 - Backend will be deployed to AWS or Heroku
 - Deployment will be done by Docker we will choose AWS, environment setup will be done by Terraform
