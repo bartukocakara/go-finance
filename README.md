@@ -8,13 +8,12 @@
 # Finance App
 | No. | Topic                                                                   |
 | --- | ----------------------------------------------------------------------- |
-| 1   | [**Semantic Versioning 2.0.0**](#Semantic-Versioning-2.0.0)       |
-| 2   | [**Purpose**](#Purpose)                             |
-| 3   | [**Packages**](#Packages)                               |
-| 4   | [**Technologies**](#Technologies)                                                 |
-| 5   | [**Features**](#Features)                                                 |
-| 6   | [**Configs**](#Configs)                                                 |
-| 7   | [**Endpoints**](#Endpoints)                                                 |
+| 1   | [**Purpose**](#Purpose)                             |
+| 2   | [**Packages**](#Packages)                               |
+| 3   | [**Technologies**](#Technologies)                                                 |
+| 4   | [**Features**](#Features)                                                 |
+| 5   | [**Configs**](#Configs)                                                 |
+| 6   | [**Endpoints**](#Endpoints)                                                 |
 
 ### Semantic Versioning 2.0.0 https://semver.org/lang/tr/
 
