@@ -25,6 +25,7 @@ func SetUserAPI(db database.Database, router *mux.Router, permissions auth.Permi
 		// -----------USER----------------------------
 		NewAPI(http.MethodPost, "/users", api.Create, auth.Any),
 		NewAPI(http.MethodGet, "/users", api.List, auth.Admin, auth.MemberIsTarget),
+		NewAPI(http.MethodGet, "/users/{UserID}", api.Get, auth.Admin, auth.MemberIsTarget),
 		NewAPI(http.MethodPost, "/login", api.Login, auth.Any),
 	}
 
@@ -199,4 +200,19 @@ func (api *UserAPI) List(w http.ResponseWriter, r *http.Request) {
 
 	logger.Info("Users returned")
 	utils.WriteJson(w, http.StatusOK, &users)
+}
+
+func (api *UserAPI) Get(w http.ResponseWriter, r *http.Request) {
+	logger := logrus.WithField("func", "user.go -> Get()")
+	vars := mux.Vars(r)
+	userID := model.UserID(vars["UserID"])
+
+	ctx := r.Context()
+	user, err := api.DB.GetUserByID(ctx, userID)
+	if err != nil {
+		logger.WithError(err).Warn("Error getting user by User ID", userID)
+	}
+
+	logger.WithField("UserID", user.ID).Info("Get user success")
+	utils.WriteJson(w, http.StatusOK, user)
 }
