@@ -22,7 +22,7 @@ type User struct {
 
 var isEmail = regexp.MustCompile(`^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$`)
 
-func (u *User) Verify() error {
+func (u *User) VerifyEmail() error {
 	if u.Email == nil || (u.Email != nil && len(*u.Email) == 0) {
 		return errors.New("Email is required")
 	}
@@ -41,4 +41,13 @@ func (u *User) CheckPassword(password string) error {
 
 func HashPassword(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+}
+
+func (u *User) SetPassword(password string) error {
+	hash, err := HashPassword(password)
+	if err != nil {
+		return err
+	}
+	u.Password = &hash
+	return nil
 }
