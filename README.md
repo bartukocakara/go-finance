@@ -33,8 +33,6 @@
 ### Server
 
 - Backend will be deployed to AWS or Heroku
-- Deployment will be done by Docker we will choose AWS, environment setup will be done by Terraform
-
 
 ### Features
 * [ ] User create profile email, facebook or google 
