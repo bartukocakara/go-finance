@@ -12,6 +12,7 @@ type Database interface {
 	UsersDB
 	SessionDB
 	UserRoleDB
+	MerchantDB
 	io.Closer
 }
 
