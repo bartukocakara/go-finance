@@ -14,6 +14,7 @@ type UsersDB interface {
 	GetUserByEmail(ctx context.Context, email string) (*model.User, error)
 	ListUsers(ctx context.Context) ([]*model.User, error)
 	UpdateUser(ctx context.Context, user *model.User) error
+	DeleteUser(ctx context.Context, userID model.UserID) (bool, error)
 }
 
 var ErrUserExists = errors.New("User with that email already exists")
@@ -113,4 +114,25 @@ func (d *database) UpdateUser(ctx context.Context, user *model.User) error {
 	}
 
 	return nil
+}
+
+const deleteUserQuery = `
+	UPDATE users
+	SET deleted_at = NOW(),
+		email = concat(email, '-DELETE-', uuid_generate_v4())
+	WHERE user_id = $1;
+`
+
+func (d *database) DeleteUser(ctx context.Context, userID model.UserID) (bool, error) {
+	result, err := d.conn.ExecContext(ctx, deleteUserQuery, userID)
+	if err != nil {
+		return false, err
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil || rows == 0 {
+		return false, err
+	}
+
+	return true, nil
 }
