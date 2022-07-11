@@ -17,6 +17,7 @@ func NewRouter(db database.Database) (http.Handler, error) {
 
 	v1.SetUserAPI(db, apiRouter, permissions)
 	v1.SetUserRoleAPI(db, apiRouter, permissions)
+	v1.SetMerchantAPI(db, apiRouter, permissions)
 	router.Use(auth.AutherizationToken)
 
 	return router, nil
