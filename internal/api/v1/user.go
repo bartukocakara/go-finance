@@ -27,6 +27,7 @@ func SetUserAPI(db database.Database, router *mux.Router, permissions auth.Permi
 		NewAPI(http.MethodGet, "/users", api.List, auth.Admin, auth.MemberIsTarget),
 		NewAPI(http.MethodGet, "/users/{UserID}", api.Get, auth.Admin, auth.MemberIsTarget),
 		NewAPI(http.MethodPatch, "/users/{UserID}", api.Update, auth.Admin, auth.MemberIsTarget),
+		NewAPI(http.MethodDelete, "/users/{UserID}", api.Delete, auth.Admin, auth.MemberIsTarget),
 		NewAPI(http.MethodPost, "/login", api.Login, auth.Any),
 	}
 
@@ -278,4 +279,35 @@ func (api *UserAPI) Update(w http.ResponseWriter, r *http.Request) {
 
 	logger.Info("User updated")
 	utils.WriteJson(w, http.StatusOK, user)
+}
+
+// DELETE -/users/{userID}
+// Permission - MemberIsTarget, Admin
+func (api *UserAPI) Delete(w http.ResponseWriter, r *http.Request) {
+	logger := logrus.WithField("Func", "user.go -> Delete()")
+	vars := mux.Vars(r)
+
+	userID := model.UserID(vars["UserID"])
+	principal := auth.GetPrincipal(r)
+	logger = logger.WithFields(logrus.Fields{
+		"UserID":    userID,
+		"principal": principal,
+	})
+	if userID == principal.UserID {
+		logger.Warn("Cannot delete myself")
+		utils.WriteError(w, http.StatusConflict, "Error deleting user itself", nil)
+		return
+	}
+	ctx := r.Context()
+	ok, err := api.DB.DeleteUser(ctx, userID)
+	if !ok && err != nil {
+		logger.WithError(err).Warn("Error deleting user")
+		utils.WriteError(w, http.StatusConflict, "Error Deleting user", nil)
+		return
+	}
+
+	logger.Info("User Deleted")
+	utils.WriteJson(w, http.StatusOK, &ActionDeleted{
+		Deleted: true,
+	})
 }
