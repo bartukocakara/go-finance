@@ -63,6 +63,9 @@ make up-dev
 | :------:|  :-----------:| :-----------:| :-----------:| :-----------:| :-----------:|
 | /users   | Create User  | POST | email, deviceID, password| - | - |
 | /users   | List Users | GET | - | Bearer {Token} | 'admin' |
+| /users/{UserID}   | Get User | GET | - | Bearer {Token} | 'admin' |
+| /users/{UserID}   | Update User | PATCH | email, password | Bearer {Token} | 'admin' |
+| /users/{UserID}   | Delete User | DELETE | - | Bearer {Token} | 'admin' |
 | /login   | Login User  | POST | email, deviceID, password | - | - |
 | /users/{userID}/roles   | Grant Role to User | POST | role(user, admin) | Bearer {Token} | 'admin' |
 | /users/{userID}/roles   | Revoke Role from User | DELETE | role(user, admin) | Bearer {Token} | 'admin' |
