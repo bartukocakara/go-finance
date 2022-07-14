@@ -67,8 +67,18 @@ make up-dev
 | /users/{UserID}   | Update User | PATCH | email, password | Bearer {Token} | 'admin' |
 | /users/{UserID}   | Delete User | DELETE | - | Bearer {Token} | 'admin' |
 | /login   | Login User  | POST | email, deviceID, password | - | - |
-| /users/{userID}/roles   | Grant Role to User | POST | role(user, admin) | Bearer {Token} | 'admin' |
-| /users/{userID}/roles   | Revoke Role from User | DELETE | role(user, admin) | Bearer {Token} | 'admin' |
-| /users/{userID}/roles   | List Users Role | GET | - | Bearer {Token} | 'admin' |
-| /users/{userID}/roles   | Update Users Role  | UPDATE | role(user, admin) | Bearer {Token} | 'admin' |
+| /users/{UserID}/roles   | Grant Role to User | POST | role(user, admin) | Bearer {Token} | 'admin' |
+| /users/{UserID}/roles   | Revoke Role from User | DELETE | role(user, admin) | Bearer {Token} | 'admin' |
+| /users/{UserID}/roles   | List Users Role | GET | - | Bearer {Token} | 'admin' |
+| /users/{UserID}/roles   | Update Users Role  | PATCH | role(user, admin) | Bearer {Token} | 'admin' |
+| /users/{UserID}/merchants   | Create Merchant  | POST | name | Bearer {Token} | 'admin' |
+| /users/{UserID}/merchants/{MerchantID}   | Get Merchant  | GET | - | Bearer {Token} | 'admin' |
+| /users/{UserID}/merchants/{MerchantID}   | Update Merchant  | PATCH | name | Bearer {Token} | 'admin' |
+| /users/{UserID}/merchants   | List Merchant  | GET | - | Bearer {Token} | 'admin' |
+| /users/{UserID}/merchants/{MerchantID}   | Delete Merchant  | DELETE | - | Bearer {Token} | 'admin' |
+| /users/{UserID}/categories   | Create Category  | POST |  name | Bearer {Token} | 'admin' |
+| /users/{UserID}/categories/{CategoryID}   | Update Category  | PATCH | name | Bearer {Token} | 'admin' |
+| /users/{UserID}/categories/{CategoryID}   | Get Category  | GET | - | Bearer {Token} | 'admin' |
+| /users/{UserID}/categories   | List Category  | GET | - | Bearer {Token} | 'admin' |
+| /users/{UserID}/categories/{CategoryID}   | Delete Category  | DELETE | - | Bearer {Token} | 'admin' |
 
