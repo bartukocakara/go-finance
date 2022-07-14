@@ -1,7 +1,10 @@
 CREATE TABLE merchants (
     merchant_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users,
-    creatd_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMP,
     name TEXT NOT NULL DEFAULT ''
 );
+
+CREATE UNIQUE INDEX merchant_name 
+    ON merchants (name);
