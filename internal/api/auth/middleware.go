@@ -7,6 +7,8 @@ import (
 	"financial-app/internal/model"
 	"net/http"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -22,6 +24,7 @@ func AutherizationToken(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		req, err := CheckToken(r)
 		if err != nil {
+			logrus.WithError(err).Error("Wrong token added to header")
 			utils.WriteError(w, http.StatusUnauthorized, err.Error(), nil)
 			return
 		}
