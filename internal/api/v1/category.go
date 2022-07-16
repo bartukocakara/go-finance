@@ -23,11 +23,11 @@ func SetCategoryAPI(db database.Database, router *mux.Router, permissions auth.P
 	}
 
 	apis := []API{
-		NewAPI(http.MethodPost, "/users/{UserID}/categories", api.Create, auth.MemberIsTarget),
-		NewAPI(http.MethodGet, "/users/{UserID}/categories", api.List, auth.MemberIsTarget),
-		NewAPI(http.MethodPatch, "/users/{UserID}/categories/{CategoryID}", api.Update, auth.MemberIsTarget),
-		NewAPI(http.MethodGet, "/users/{UserID}/categories/{CategoryID}", api.Get, auth.MemberIsTarget),
-		NewAPI(http.MethodDelete, "/users/{UserID}/categories/{CategoryID}", api.Delete, auth.MemberIsTarget),
+		NewAPI(http.MethodPost, "/users/{UserID}/categories", api.Create, auth.Admin, auth.MemberIsTarget),
+		NewAPI(http.MethodGet, "/users/{UserID}/categories", api.List, auth.Admin, auth.MemberIsTarget),
+		NewAPI(http.MethodPatch, "/users/{UserID}/categories/{CategoryID}", api.Update, auth.Admin, auth.MemberIsTarget),
+		NewAPI(http.MethodGet, "/users/{UserID}/categories/{CategoryID}", api.Get, auth.Admin, auth.MemberIsTarget),
+		NewAPI(http.MethodDelete, "/users/{UserID}/categories/{CategoryID}", api.Delete, auth.Admin, auth.MemberIsTarget),
 	}
 
 	for _, api := range apis {
