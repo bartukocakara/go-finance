@@ -86,3 +86,12 @@ make up-dev
 | /users/{UserID}/accounts/{AccountID}   | Get Account  | GET | - | Bearer {Token} | admin,user |
 | /users/{UserID}/accounts   | List Category  | GET | - | Bearer {Token} | admin,user |
 | /users/{UserID}/accounts/{AccountID}   | Delete Account  | DELETE | - | Bearer {Token} | admin,user |
+| /users/{UserID}/transactions   | Create Account  | POST |  account_id,category_id,type,amount,currency,notes | Bearer {Token} | admin,user |
+| /transactions   | List All Transactions  | GET | (Q)from,to | Bearer {Token} | admin,user |
+| /transactions/{TransactionID}   | Show Transaction  | GET | - | Bearer {Token} | admin,user |
+| /accounts/{AccountID}/transactions   | Get Transaction By Account ID  | GET | (Q)from,to | Bearer {Token} | admin,user |
+| /categories/{CategoryID}/transactions   | List Transaction By Category ID  | GET | (Q)from,to | Bearer {Token} | admin,user |
+| /users/{UserID}/transactions  | List Transaction By User ID  | GET | (Q)from,to | Bearer {Token} | admin,user |
+| /users/{UserID}/transactions/{TransactionID}   | Get Transaction By ID  | GET | - | Bearer {Token} | admin,user |
+| /users/{UserID}/transactions/{TransactionID}   | Update Transaction By ID  | PATCH | account_id,category_id,type,date,currency,amount | Bearer {Token} | admin,user |
+| /users/{UserID}/transactions/{TransactionID}   | Delete Transaction By ID  | DELETE | - | Bearer {Token} | admin,user |
